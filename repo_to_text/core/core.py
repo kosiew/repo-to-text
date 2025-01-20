@@ -2,6 +2,7 @@
 Core functionality for repo-to-text
 """
 
+import zipfile
 import os
 import subprocess
 from typing import Tuple, Optional, List, Dict, Any, Set
@@ -204,11 +205,13 @@ def should_ignore_file(
     logging.debug('    Result: %s', result)
     return result
 
+
 def save_repo_to_text(
         path: str = '.',
         output_dir: Optional[str] = None,
         to_stdout: bool = False,
-        cli_ignore_patterns: Optional[List[str]] = None
+        cli_ignore_patterns: Optional[List[str]] = None,
+        zip_output: bool = False
     ) -> str:
     """Save repository structure and contents to a text file."""
     logging.debug('Starting to save repo structure to text for path: %s', path)
@@ -234,6 +237,16 @@ def save_repo_to_text(
 
     output_file = write_output_to_file(output_content, output_dir)
     copy_to_clipboard(output_content)
+
+    if zip_output:
+        zip_file = f"{output_file}.zip"
+        with zipfile.ZipFile(zip_file, 'w') as zipf:
+            zipf.write(output_file, os.path.basename(output_file))
+        print(
+            "[SUCCESS] Repository structure and contents successfully saved and zipped to "
+            f"file: \"./{zip_file}\""
+        )
+        return zip_file
 
     print(
         "[SUCCESS] Repository structure and contents successfully saved to "

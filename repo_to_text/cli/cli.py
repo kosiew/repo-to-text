@@ -49,6 +49,7 @@ def parse_args() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command line arguments
     """
+    print("repo-to-text: Convert repository structure and contents to text")
     parser = argparse.ArgumentParser(
         description='Convert repository structure and contents to text'
     )
@@ -68,6 +69,7 @@ def parse_args() -> argparse.Namespace:
         help="List of files or directories to ignore in both tree and content sections. "
         "Supports wildcards (e.g., '*')."
     )
+    parser.add_argument('--zip-output', action='store_true', help='Zip the output')
     return parser.parse_args()
 
 def main() -> NoReturn:
@@ -89,7 +91,8 @@ def main() -> NoReturn:
                 path=args.input_dir,
                 output_dir=args.output_dir,
                 to_stdout=args.stdout,
-                cli_ignore_patterns=args.ignore_patterns
+                cli_ignore_patterns=args.ignore_patterns,
+                zip_output=args.zip_output
             )
 
         logging.debug('repo-to-text script finished')
