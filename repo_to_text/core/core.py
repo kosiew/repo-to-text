@@ -240,7 +240,7 @@ def save_repo_to_text(
 
     if zip_output:
         zip_file = f"{output_file}.zip"
-        with zipfile.ZipFile(zip_file, 'w') as zipf:
+        with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
             zipf.write(output_file, os.path.basename(output_file))
         print(
             "[SUCCESS] Repository structure and contents successfully saved and zipped to "
